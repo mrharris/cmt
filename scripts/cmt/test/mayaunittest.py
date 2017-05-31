@@ -99,7 +99,9 @@ def get_tests(directories=None, test=None, test_suite=None):
 
 def maya_module_tests():
     """Generator function to iterate over all the Maya module tests directories."""
-    for path in os.environ['MAYA_MODULE_PATH'].split(os.pathsep):
+    module_paths = os.environ['MAYA_MODULE_PATH'].split(os.pathsep)
+    module_paths += [cmds.moduleInfo(path=True, moduleName=m) for m in cmds.moduleInfo(lm=True)]
+    for path in module_paths:
         p = '{0}/tests'.format(path)
         if os.path.exists(p):
             yield p
